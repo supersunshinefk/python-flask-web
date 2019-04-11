@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Risk</title>
+    <!--公用样式-->
+    <link rel="stylesheet" href="/css/global.css" />
+    <!--select样式-->
+    <link rel="stylesheet" href="/css/nice-select.css"/>
+    <!--index.css-->
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+    .select_number #num04{
+        background: #4261e2;
+    }
+    .select_number #num04 a{
+        color: white;
+    }
+
+    </style>
+
+</head>
+<body>
+<div class="choice_a_target_top"></div>
+
+<!--[[header-->
+<div class="header f_l">
+    <ul>
+        <li class="f_r"><img src="/images/logo_2.png"/></li>
+        <li class="f_l">INDASS Dashboard</li>
+        <!-- <li class="f_l"></li> -->
+    </ul>
+    <div class="header_all_r">
+        <div class="time"><img src="/images/icon_time.png" id="icon_time"><div id="time1">2018-01-00  00:00:00</div></div>
+        <div class="home"><a href="/select/{{ username }}"><img src="/images/home_icon.png" alt="home_icon"></a></div>
+        <div class="logout"><a href="/logout"><img src="/images/logout_icon.png" alt="logout_icon"></a></div>
+    </div>
+</div>
+<!--header]]-->
+<!--padding-->
+<div class="pd60">
+    <!--[[info-->
+     <div class="main_header f_l">
+        <ul class="main_header_ul f_l">
+            <li>客户</li>
+            <li>{{ account_tuple[0] }}</li>
+        </ul>
+        <ul class="main_header_ul f_l">
+            <li>设备型号</li>
+            <li>{{ obj_group_name }}</li>
+        </ul>
+
+        <!--[[select-->
+        <div class="index_select f_r">
+            <select class="wide">
+
+                {% for object_id in object_id_list %}
+                <option value="{{ object_id }}">设备编号:  {{ object_id }}</option>
+                {% endfor %}
+
+
+            </select>
+        </div>
+        <div class="select_number">
+            <ul>
+                <li id="num01"><a href="index">01</a></li>
+                <li id="num02"><a href="stab">02</a></li>
+                <li id="num03"><a href="tend">03</a></li>
+                <li id="num04"><a href="#">04</a></li>
+            </ul>
+        </div>
+        <!--select]]-->
+    </div>
+    <div class="f_l">
+        <div class="risk_left">
+            <div class="f_l risk_bound">
+                <div class="risk_bound_bg"></div>
+                <div class="all_title"><span></span>风险状态示意图</div>
+                <!--[[risk-->
+                <div class="risk_bound_i" style="margin-top:44px;margin-left:50px;">
+                    <i class="risk_bound_max_num" ></i>
+                    <i class="risk_bound_safe_num"></i>
+                    <i class="risk_bound_y_num"></i>
+                    <i class="risk_bound_bot_num"></i>
+                    <div class="f_l canvas_bg_div">
+                        <canvas id="risk_xtop_line" width="760" height="180"></canvas>
+                        <canvas id="risk_x_line" width="760" height="180"></canvas>
+                        <i class="risk_bound_x_num"></i>
+                        <canvas id="risk_x_midline" width="760" height="180"></canvas>
+                        <canvas id="risk_center_circle" width="760" height="180"></canvas>
+                        <canvas id="risk_y_line" width="760" height="180"></canvas>
+                        <canvas id="risk_bias_line" width="760" height="180"></canvas>
+                        <i class="risk_bound_maxi_num"></i>
+                        <i class="risk_bound_mini_num"></i>
+                        <canvas id="risk_x_botline" width="760" height="180"></canvas>
+                    </div>
+                </div>
+                <!--risk]]-->
+            </div>
+            <div class="f_l risk mb30">
+                <div class="all_title"><span></span>风险概率曲线</div>
+                <div id="risk"></div>
+            </div>
+        </div>
+        <div class="risk_right">
+            <div class="f_l targrt_chart_div">
+                <div class="all_title"><span></span>优化目标</div>
+                <div id="targrtChart"></div>
+            </div>
+            <div class="f_l targrt_div">
+                 <div class="f_l target_table_div" id="table_content">
+                 </div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ECharts引入 -->
+<script src="/js/echarts3.js"></script>
+<script src="/js/echarts_all.js"></script>
+<script src="/js/theme/dark.js"></script>
+<script src="/js/jquery-3.1.1.js"></script>
+<!--select-->
+<script src="/js/jquery.nice-select.min.js"></script>
+<script type="text/javascript">
+
+    //x轴-top
+    function risk_xtop_line(){
+        var canvas = document.getElementById("risk_xtop_line");
+        var context = canvas.getContext("2d");
+        context.clearRect(0,0,canvas.width,canvas.height);
+        context.strokeStyle = "#cd2e36";
+        context.lineWidth=3;
+        context.moveTo(0,50);  //100那条线
+        context.lineTo(760,50);
+        $(".risk_bound_max_num").css("display","block").text(100);
+        $(".risk_bound_bg").css("display","block");
+        context.stroke();
+    }
+
+    //x轴-center
+    function risk_x_midline(){
+        var canvas = document.getElementById("risk_x_midline");
+        var context = canvas.getContext("2d");
+        context.clearRect(0,0,canvas.width,canvas.height);
+        context.strokeStyle = "#3c623f";
+        context.lineWidth=3;
+        context.moveTo(0.5,150.5); //0那条线
+        context.lineTo(760.5,150.5);
+        $(".risk_bound_safe_num").css("display","block").text(0);
+        context.stroke();
+    }
+
+    //x轴-bottom
+    function risk_x_botline(){
+        var canvas = document.getElementById("risk_x_botline");
+        var context = canvas.getContext("2d");
+        context.clearRect(0,0,canvas.width,canvas.height);
+        context.strokeStyle = "#cd2e36";
+        context.lineWidth=3;
+        context.moveTo(0,68);
+        context.lineTo(760,68);
+        $(".risk_bound_bot_num").css("display","block").text(100);
+        context.stroke();
+    }
+
+    //可移动x轴
+    function risk_x_line(midpoint,risk_y_data){
+        var canvas = document.getElementById("risk_x_line");
+        var context = canvas.getContext("2d");
+        var width = $("#risk_x_line").attr("width");
+        $("#risk_x_line").attr("width",0);
+        $("#risk_x_line").attr("width",width);
+        context.clearRect(0, 0, width, $("#risk_x_line").attr("height"));
+        context.strokeStyle = "#6a3449";
+        var mid_y=150-midpoint[1];
+        context.moveTo(0,mid_y); //经过中心点那条线
+        context.lineTo(760,mid_y);
+        $(".risk_bound_x_num").css({"display":"block","top":mid_y-12+"px"}).text(risk_y_data);
+        context.stroke();
+    }
+
+    //中心圆点
+    function risk_center_circle (midpoint){
+        var c=document.getElementById("risk_center_circle");
+        var cxt=c.getContext("2d");
+        cxt.clearRect(0,0,c.width,c.height);
+        cxt.fillStyle="#f7106b";
+        cxt.strokeStyle="#ffffff";
+        cxt.beginPath();
+        cxt.arc(380+0,150-midpoint[1],3,0,Math.PI*2,true);
+        cxt.closePath();
+        cxt.stroke();
+        cxt.fill();
+    }
+
+    //可移动y轴
+    function risk_y_line(midpoint){
+        var ct = document.getElementById("risk_y_line");
+        var ctx = ct.getContext("2d");
+        ctx.clearRect(0,0,ct.width,ct.height);
+        ctx.strokeStyle = "#344a5a";
+        ctx.moveTo(380,50);
+        ctx.lineTo(380,150-midpoint[1]);
+        ctx.stroke();
+    }
+
+    //斜线
+    function risk_bias_line(lower, midpoint, upper,risk_diag,riskd_data){
+
+        var cs = document.getElementById("risk_bias_line");
+        var ct = cs.getContext("2d");
+        ct.clearRect(0,0,cs.width,cs.height);
+        ct.strokeStyle = "#4261e2";
+        ct.lineWidth=3;
+        ct.beginPath();
+        var x=lower[0];
+        var y=lower[1];
+        var maxi_num_left=0;
+       if(x>0){
+            maxi_num_left=380-x-50;
+        }else{
+            maxi_num_left=380-x+2;
+        }
+
+        console.log(x,y);
+
+        var maxi_num_top=(150-midpoint[1])+y;
+        var mini_num_top=(150-midpoint[1])-y+5;
+        var mini_num_left=380+x-20;
+        $(".risk_bound_maxi_num").css({"display":"block","top":""+maxi_num_top+"px","left":""+maxi_num_left+"px"}).text(risk_diag);
+        $(".risk_bound_mini_num").css({"display":"block","top":""+mini_num_top+"px","left":""+mini_num_left+"px"}).text(riskd_data);
+        ct.moveTo(380-x,(150-midpoint[1])+y);
+        ct.lineTo(380,150-midpoint[1]);
+        ct.moveTo(380,150-midpoint[1]);
+        ct.lineTo(380+x,(150-midpoint[1])-y);
+        ct.stroke();
+    }
+
+</script>
+<!--init-->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select').niceSelect();
+    });
+    $(".choice_a_target_top").mouseenter(function(){
+        $(".choice_a_target").css("display","block");
+    });
+    $(".choice_a_target").mouseleave(function(){
+        $(this).hide();
+    });
+
+    //risk
+    var risk=document.getElementById("risk");
+    var myCharts_risk=echarts.init(risk,"dark");
+
+    //TARGET
+    var targrtChart=document.getElementById('targrtChart');
+    var myCharts_targrtChart=echarts.init(targrtChart,"dark");
+
+    var risk=new Array();
+    var target_time=new Array();
+    var curve_time = new Array();
+    var tvalue = $(".wide ").val();
+
+    $(".wide").change(function(){
+        tvalue=$(".wide option:selected").val();
+        risk=[];
+        target_time=[];
+        curve_time=[];
+        testWebsocket(tvalue);
+    });
+
+    var jsonSocket=null;
+    function testWebsocket(tvalue) {
+        if(jsonSocket!=null)
+            {
+                jsonSocket.close();
+            }
+        jsonSocket=new WebSocket("{{ websocket_url }}");
+        jsonSocket.onopen = function() {
+        console.log("JSON socket connected!");
+        jsonSocket.send(JSON.stringify(["SUBSCRIBE", "channel/{{ account_tuple[1] }}/{{ project_id }}/"+tvalue]));
+        };
+        jsonSocket.onmessage = function(messageEvent) {
+            var message=JSON.parse(messageEvent.data);
+            // console.log(message);
+            // var start_idx=message.indexOf("[");
+            // var line_data = message.substring(start_idx, message.length-1);
+            // message=JSON.parse(JSON.parse(line_data)[2]);
+            // console.log(message);
+            var line_data=message;           
+            if (typeof(line_data) != "number")
+            {
+                var lower=line_data.Risk.Risk_Lower;
+                var midpoint=line_data.Risk.Risk_Midpoint;
+                var upper=line_data.Risk.Risk_Upper;
+                var risk_diag=line_data.Risk.Risk_Diag[line_data.Risk.Risk_Diag.length-2];
+                var riskd_data=line_data.Risk.Risk_Diag[line_data.Risk.Risk_Diag.length-1];
+                var risk_y_data=line_data.Risk.Risk;
+                risk_x_line(midpoint,risk_y_data);
+                risk_center_circle(midpoint);
+                risk_y_line(midpoint);
+                risk_bias_line(lower,midpoint,upper,risk_diag,riskd_data);
+                risk_x_midline();
+                risk_x_botline();
+                risk_xtop_line();
+                
+				var myDate = new Date();
+                var seconds=myDate.getSeconds();
+                var minutes=myDate.getMinutes();
+				var hour=myDate.getHours();
+				
+				var path_time = new Array();
+				var tmp_time=new Array();
+				for(var i=0;i<10;i++){
+                    tmp_time.push((hour>=10?hour:'0'+hour)+':'+(minutes>=10?minutes:'0'+minutes)+':'+(seconds>=10?seconds:'0'+seconds));
+                    if(seconds>44){
+                        seconds-=45;
+                        minutes+=1;
+                        if(minutes>59){
+                            minutes-=60;
+                            hour+=1;
+                            if(hour>23){
+                                hour-=24;
+                            }
+                        }
+                    }else{
+                        seconds+=15;
+                    }
+                }
+                path_time=path_time.concat(tmp_time);
+
+                var curve_time = new Array();
+				var risk_seconds=myDate.getSeconds();
+                var risk_minutes=myDate.getMinutes();
+				var risk_hour=myDate.getHours();
+                curve_time.push((myDate.getHours()>=10?myDate.getHours():'0'+myDate.getHours())+':'+(myDate.getMinutes()>=10?myDate.getMinutes():'0'+myDate.getMinutes())+':'+(myDate.getSeconds()>=10?myDate.getSeconds():'0'+myDate.getSeconds()));
+                var fore_time=new Array();
+                for(var i=0;i<line_data.Risk.Risk_Fore.length;i++){
+                    fore_time.push((risk_hour>=10?risk_hour:'0'+risk_hour)+':'+(risk_minutes>=10?risk_minutes:'0'+risk_minutes)+':'+(risk_seconds>=10?risk_seconds:'0'+risk_seconds));
+                    if(risk_seconds>44){
+                        risk_seconds-=45;
+                        risk_minutes+=1;
+                        if(risk_minutes>59){
+                            risk_minutes-=60;
+                            risk_hour+=1;
+                            if(risk_hour>23){
+                                risk_hour-=24;
+                            }
+                        }
+                    }else{
+                        risk_seconds+=15;
+                    }
+                }
+                var time=new Array();
+                time=curve_time.concat(fore_time);
+
+                var risk=new Array();
+                risk.push(line_data.Risk.Risk);
+                if(risk.length>10){
+                    risk.shift();
+                    curve_time.shift();
+                }
+                for(var i=0;i<risk.length-1;i++){
+                    line_data.Risk.Risk_Fore.unshift('-');
+                }
+                var lineOption=createoption_risk(risk, time, line_data.Risk.Risk_Fore);
+                myCharts_risk.setOption(lineOption);
+
+                var opt_one=line_data.Opt_One.Line_path;
+               // var opt_two=line_data.Opt_Two.Line_path;
+				var opt_option=new Array();
+				for(var va in opt_one)
+					{
+						opt_option.push(opt_one[va]);
+					}
+				opt_option = opt_option[0];
+				//var option_two=new Array();
+				//for(var va in opt_two)
+				//	{
+				//		option_two.push(opt_two[va]);
+				//	}
+				//option_two = option_two[0];
+                var lineOption=createoption_target(opt_option,path_time);
+                myCharts_targrtChart.setOption(lineOption);
+				
+				
+				var time=new Array('0 min','5 min','10 min','15 min','20 min','30 min');
+				var parameter_one = line_data.Opt_One.Parameter;
+				//var parameter_two = line_data.Opt_Two.Parameter;
+				var table_one = '<div><table class="f_l target_table_y">\
+						<tr style="background: #4261E2;">\
+							<td>优化方案一</td>\
+                            <td>'+time[0]+'</td>\
+                            <td>'+time[1]+'</td>\
+                            <td>'+time[2]+'</td>\
+							<td>'+time[3]+'</td>\
+							<td>'+time[4]+'</td>\
+							<td>'+time[5]+'</td>\
+						</tr>';
+				for(var i in parameter_one){
+					table_one+='<tr>\
+						<td>'+i+'</td>\
+						<td>'+Math.floor(parameter_one[i][0]*100)/100+'</td>\
+						<td>'+Math.floor(parameter_one[i][1]*100)/100+'</td>\
+						<td>'+Math.floor(parameter_one[i][2]*100)/100+'</td>\
+						<td>'+Math.floor(parameter_one[i][3]*100)/100+'</td>\
+						<td>'+Math.floor(parameter_one[i][4]*100)/100+'</td>\
+						<td>'+Math.floor(parameter_one[i][5]*100)/100+'</td>\
+					</tr>';
+				}
+				table_one+='</table></div>';
+				//var table_two = '<div><table class="f_l target_table_y">\
+//						<tr style="background: #CD2E36;">\
+//							<td>优化方案二</td>\
+//                            <td>'+time[0]+'</td>\
+//                            <td>'+time[1]+'</td>\
+//                            <td>'+time[2]+'</td>\
+//							<td>'+time[3]+'</td>\
+//							<td>'+time[4]+'</td>\
+//							<td>'+time[5]+'</td>\
+//						</tr>';
+//				for(var i in parameter_two){
+//					table_two+='<tr>\
+//						<td>'+i+'</td>\
+//						<td>'+Math.floor(parameter_two[i][0]*100)/100+'</td>\
+//						<td>'+Math.floor(parameter_two[i][1]*100)/100+'</td>\
+//						<td>'+Math.floor(parameter_two[i][2]*100)/100+'</td>\
+//						<td>'+Math.floor(parameter_two[i][3]*100)/100+'</td>\
+//						<td>'+Math.floor(parameter_two[i][4]*100)/100+'</td>\
+//						<td>'+Math.floor(parameter_two[i][5]*100)/100+'</td>\
+//					</tr>';
+//				}
+//				table_two+='</table></div>';
+				$('#table_content').empty();
+				$('#table_content').append(table_one);
+            }
+        };
+
+            jsonSocket.onclose = function() {
+            console.log("JSON socket closed!");
+        }
+    }
+    testWebsocket(tvalue);
+
+</script>
+<script src="/js/date-time.js"></script>
+<script type="text/javascript">
+    setInterval(function() {
+        var newDate = new Date();
+        document.getElementById("time1").innerHTML = newDate.format('yyyy-MM-dd hh:mm:ss');
+    },1000);
+</script>
+</body>

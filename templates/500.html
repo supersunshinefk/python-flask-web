@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>500 Internal Server Error</title>
+
+    <style>
+        body {
+            /* background: #16191c; */
+            background: #17191c;
+        }
+
+        .p1 {
+            margin: 0;
+            font-size: 28px;
+            color: #ffffff;
+        }
+
+        .p2 {
+            margin: 0;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #bbbbbb;
+        }
+
+        .img_404 {
+            height: 374px;
+            width: 328px;
+            position: absolute;
+            top: 50%;
+            margin-top: -270px;
+            left: 50%;
+            margin-left: -164px;
+        }
+
+        .div1 {
+            height: 98px;
+            width: 1000px;
+            position: absolute;
+            top: 50%;
+            margin-top: 100px;
+            left: 50%;
+            margin-left: -500px;
+            text-align: center;
+        }
+
+        .son2 {
+            background: #4162ff;
+            width: 272px;
+            height: 60px;
+            border-radius: 30px;
+            position: absolute;
+            top: 50%;
+            margin-top: 230px;
+            left: 50%;
+            margin-left: -136px;
+        }
+
+        a {
+            float: left;
+            color: #ffffff;
+            font-size: 16px;
+            line-height: 60px;
+            text-decoration: none;
+            margin-left: 10px;
+            /* font-weight:bold; */
+        }
+        a:hover {
+            color: orange;
+        }
+
+        .icon_404 {
+            display: block;
+            float: left;
+            margin-top: 20px;
+            margin-left: 44px;
+        } 
+
+    </style>
+</head>
+<body>
+
+    <div class="img_404">
+        <img src="/images/500.png" alt="404">
+    </div>
+    <div class="div1">
+    <p class="p1">服务器内部故障啦!</p>
+    <p class="p2">您可以返回INDASS项目选择页面，谢谢！</p>
+    </div>
+
+    <div class="son2">
+        <img src="/images/icon_404.png" alt="icon_404" class="icon_404">
+        <a href="/select/{{ username }}" id="click">INDASS项目选择页面</a>
+    </div> 
+
+</body>
+
+</html>

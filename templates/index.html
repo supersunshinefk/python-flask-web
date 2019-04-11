@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Index</title>
+    <!--公用样式-->
+    <link rel="stylesheet" href="/css/global.css"/>
+    <!--select样式-->
+    <link rel="stylesheet" href="/css/nice-select.css"/>
+    <!--index.css-->
+    <link rel="stylesheet" href="/css/index.css"/>
+    <style>
+    .select_number #num01{
+        background: #4261e2;
+    }
+    .select_number #num01 a{
+        color: white;
+    }
+
+    </style>
+</head>
+<body>
+<div class="choice_a_target_top"></div>
+
+<!--[[header-->
+<div class="header f_l">
+    <ul>
+        <li class="f_r"><img src="/images/logo_2.png"/></li>
+        <li class="f_l">INDASS Dashboard</li>
+        <!-- <li class="f_l"></li> -->
+    </ul>
+    <div class="header_all_r">
+        <div class="time"><img src="/images/icon_time.png" id="icon_time"><div id="time1">2018-01-00  00:00:00</div></div>
+        <div class="home"><a href="/select/{{ username }}"><img src="/images/home_icon.png" alt="home_icon"></a></div>
+        <div class="logout"><a href="/logout"><img src="/images/logout_icon.png" alt="logout_icon"></a></div>
+    </div>
+</div>
+
+
+<!--header]]-->
+
+<!--padding-->
+<div class="pd60">
+
+    <!--[[info-->
+    <div class="main_header f_l">
+        <ul class="main_header_ul f_l">
+            <li>客户</li>
+            <li>{{ account_tuple[0] }}</li>
+        </ul>
+        <ul class="main_header_ul f_l">
+            <li>设备型号</li>
+            <li>{{ obj_group_name }}</li>
+        </ul>
+
+        <!--[[select-->
+        <div class="index_select f_r">
+            <select class="wide">
+                {% for object_id in object_id_list %}
+                    <option value="{{ object_id }}">设备编号： {{ object_id }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="select_number">
+            <ul>
+                <li id="num01"><a href="#">01</a></li>
+                <li id="num02"><a href="stab">02</a></li>
+                <li id="num03"><a href="tend">03</a></li>
+                <li id="num04"><a href="risk">04</a></li>
+            </ul>
+        </div>
+        <!--select]]-->
+
+    </div>
+    <!--info]]-->
+
+    <!--[[INDEX-MAP-->
+    <div class="main680 f_l680">
+        <div class="all_title"><span></span>设备状态映像图</div>
+        <div id="mainFirst"></div>
+        <div>
+            <ul>
+                <li class="mainFirst_title">运行指数</li>
+                <li class="mainFirst_num" id="mainFirst_num">0</li>
+            </ul>
+        </div>
+    </div>
+    <!--INDEX-MAP]]-->
+
+    <!--[[INDEX-CURVE-->
+    <div class="main1090 f_l1090">
+        <div class="all_title"><span></span>运行指数曲线</div>
+        <div id="mainSecond" class="f_l1090"></div>
+    </div>
+    <!--INDEX-CURVE]]-->
+
+    <!--[[INDEX-GRADIRENT-MAP-->
+    <div class="main680_all f_l680">
+        <div class="main680_362">
+            <div class="all_title"><span></span>指数梯度</div>
+            <div id="mainThird_a"></div>
+        </div>
+        <div class="main680_362">
+            <div class="all_title"><span></span>指数累积效应</div>
+            <div id="mainThird_b"></div>
+        </div>
+    </div>
+    <!--INDEX-GRADIRENT-MAP]]-->
+
+    <!--[[INDEX-GRADIRENT-CURVE-->
+    <div class="main1090_all f_l1090 mb30">
+        <div class="main1090_166 f_l1090">
+            <div class="index_main_top f_l1090">
+                <div class="all_title"><span></span>指数梯度曲线</div>
+                <div id="mainFourth_a" class="f_l1090"></div>
+            </div>
+        </div>
+        <div class="main1090_166 f_l1090">
+            <div class="index_main_bottom f_l1090">
+                <div class="all_title"><span></span>指数累积效应曲线</div>
+                <div id="mainFourth_b" class="f_l1090"></div>
+            </div>
+        </div>
+    </div>
+    <!--INDEX-Gradirent-CURVE]]-->
+
+</div>
+
+
+<!-- ECharts引入 -->
+<script src="/js/echarts3.js"></script>
+<script src="/js/echarts_all.js"></script>
+<script src="/js/theme/dark.js"></script>
+<script src="/js/jquery-3.1.1.js"></script>
+
+<!--select-->
+<script src="/js/jquery.nice-select.min.js"></script>
+
+<!--init-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').niceSelect();
+    });
+    $(".choice_a_target_top").mouseenter(function () {
+        $(".choice_a_target").css("display", "block");
+    });
+    $(".choice_a_target").mouseleave(function () {
+        $(this).hide();
+    });
+    //INDEX-GRADIRENT-MAP
+    var index_gradirent_map = document.getElementById('mainThird_a');
+    var myChartsGMap = echarts.init(index_gradirent_map, "dark");
+
+
+    //INDEX-CUMULATING_MAP
+    var index_cumulating_map = document.getElementById('mainThird_b');
+    var myChartsCMap = echarts.init(index_cumulating_map, "dark");
+
+    //Index- GRADIRENT-CURVE
+    var option_index_gradirent_curve = document.getElementById("mainFourth_a");
+    var myCharts_index_gradirent_curve = echarts.init(option_index_gradirent_curve, "dark");
+
+
+    //INDEX-CUMULATING-CURVE
+    var option_index_cumulating_curve = document.getElementById("mainFourth_b");
+    var myCharts_index_cumulating_curve = echarts.init(option_index_cumulating_curve, "dark");
+
+    //Index-Map
+    var index_map = document.getElementById('mainFirst');
+    var myCharts_indexMap = echarts.init(index_map, "dark");
+
+
+    //Index-CURVE
+    var ms = document.getElementById("mainSecond");
+    var msmyCharts = echarts.init(ms, "dark");
+
+
+    var tvalue = $(".wide").val();
+
+    var curve_data = new Array();
+    var curve_time = new Array();
+    var gradirent_curve = new Array();
+    var cumulating_curve = new Array();
+
+    //select
+    $(".wide").change(function () {
+        tvalue = $(".wide option:selected").val();
+        testWebsocket(tvalue);
+        curve_data = [];
+        curve_time = [];
+        gradirent_curve = [];
+        cumulating_curve = [];
+    });
+    var jsonSocket = null;
+    function testWebsocket(tvalue) {
+        if (jsonSocket != null) {
+            jsonSocket.close();
+        }
+        jsonSocket = new WebSocket("{{ websocket_url }}");
+        jsonSocket.onopen = function () {
+            console.log("JSON socket connected!");
+            jsonSocket.send(JSON.stringify(["SUBSCRIBE", "channel/{{ account_tuple[1] }}/{{ project_id }}/" + tvalue]));
+        };
+        jsonSocket.onmessage = function (messageEvent) {
+            //JSON received: {"SUBSCRIBE":["message","/data/xinlei/prj01/862631039219935","[820, 932, 901, 934, 1290, 1330, 1320]"]}
+            var message = JSON.parse(messageEvent.data);
+            // var start_idx = message.indexOf("[");
+            // var line_data = message.substring(start_idx, message.length - 1);
+            // console.log("onmessage," + JSON.parse(line_data)[1]);
+            // message = JSON.parse(JSON.parse(line_data)[2]);
+            // console.log(message);
+            var line_data = message;
+
+            if (typeof(line_data) != "number") {
+
+                //1
+                $('#mainFirst_num').html(line_data.Indx['Indx']);
+                var lineOption_index_map = createoption_index_map(line_data);
+                myCharts_indexMap.setOption(lineOption_index_map);
+                //2
+                var myDate = new Date();
+                var seconds = myDate.getSeconds();
+                var minutes = myDate.getMinutes();
+                var hour = myDate.getHours();
+                curve_time.push((hour >= 10 ? hour : '0' + hour) + ':' + (minutes >= 10 ? minutes : '0' + minutes) + ':' + (seconds >= 10 ? seconds : '0' + seconds));
+                curve_data.push(line_data.Indx.Indx);
+                if (curve_data.length > 10) {
+                    curve_data.shift();
+                    curve_time.shift();
+                }
+                var lineOption_index_curve = createoption_index_curve(curve_data, curve_time);
+                msmyCharts.setOption(lineOption_index_curve);
+
+                //3
+                var lineOption_index_gradirent_map = createoption_index_gradirent_map(line_data);
+                myChartsGMap.setOption(lineOption_index_gradirent_map);
+                //4
+                var lineOption_index_cumulating_map = createoption_index_cumulating_map(line_data);
+                myChartsCMap.setOption(lineOption_index_cumulating_map);
+                //5
+                gradirent_curve.push(line_data.Indx.Grad);
+                if (gradirent_curve.length > 10) {
+                    gradirent_curve.shift();
+                }
+                var lineOption_index_gradirent_curve = createoption_index_gradirent_curve(gradirent_curve, curve_time);
+                myCharts_index_gradirent_curve.setOption(lineOption_index_gradirent_curve);
+                //6
+                cumulating_curve.push(line_data.Indx.Cumu);
+                if (cumulating_curve.length > 10) {
+                    cumulating_curve.shift();
+                }
+                var lineOption_index_cumulating_curve = createoption_index_cumulating_curve(cumulating_curve, curve_time);
+                myCharts_index_cumulating_curve.setOption(lineOption_index_cumulating_curve);
+
+            }
+        };
+        jsonSocket.onclose = function () {
+            console.log("JSON socket closed!");
+        }
+    }
+    testWebsocket(tvalue);
+
+</script>
+<script src="/js/date-time.js"></script>
+<script type="text/javascript">
+    setInterval(function () {
+        var newDate = new Date();
+        document.getElementById("time1").innerHTML = newDate.format('yyyy-MM-dd hh:mm:ss');
+    }, 1000);
+</script>
+</body>

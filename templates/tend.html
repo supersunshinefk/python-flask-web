@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tendency</title>
+    <!--公用样式-->
+    <link rel="stylesheet" href="/css/global.css" />
+    <!--select样式-->
+    <link rel="stylesheet" href="/css/nice-select.css"/>
+    <!--index.css-->
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+    .select_number #num03{
+        background: #4261e2;
+    }
+    .select_number #num03 a{
+        color: white;
+    }
+    .select_number{
+
+    margin-right: 70px;
+
+}
+
+    </style>
+</head>
+<body>
+<div class="choice_a_target_top"></div>
+
+<!--[[header-->
+<div class="header f_l">
+    <ul>
+        <li class="f_r"><img src="/images/logo_2.png"/></li>
+        <li class="f_l">INDASS Dashboard</li>
+        <!-- <li class="f_l"></li> -->
+    </ul>
+    <div class="header_all_r">
+        <div class="time"><img src="/images/icon_time.png" id="icon_time"><div id="time1">2018-01-00  00:00:00</div></div>
+        <div class="home"><a href="/select/{{ username }}"><img src="/images/home_icon.png" alt="home_icon"></a></div>
+        <div class="logout"><a href="/logout"><img src="/images/logout_icon.png" alt="logout_icon"></a></div>
+    </div>
+</div>
+<!--header]]-->
+
+<!--padding-->
+<div class="pd60" style="width:1929px;">
+
+    <!--[[info-->
+      <div class="main_header f_l">
+        <ul class="main_header_ul f_l">
+            <li>客户</li>
+            <li>{{ account_tuple[0] }}</li>
+        </ul>
+        <ul class="main_header_ul f_l">
+            <li>设备型号</li>
+            <li>{{ obj_group_name }}</li>
+        </ul>
+
+        <!--[[select-->
+        <div class="index_select f_r">
+            <select class="wide">
+
+                {% for object_id in object_id_list %}
+                <option value="{{ object_id }}">设备编号:  {{ object_id }}</option>
+                {% endfor %}
+
+
+            </select>
+        </div>
+        <div class="select_number">
+            <ul>
+                <li id="num01"><a href="index">01</a></li>
+                <li id="num02"><a href="stab">02</a></li>
+                <li id="num03"><a href="#">03</a></li>
+                <li id="num04"><a href="risk">04</a></li>
+            </ul>
+        </div>
+        <!--select]]-->
+
+    </div>
+    
+    <div class="f_l tend_left_div" style="width:960px;">
+        <div class="f_l425 temperature" style="width:470px;">
+            <div class="all_title"><span></span><i></i></div>
+            <div id="temperature" style="width:470px;"></div>
+        </div>
+        <div class="f_l425 production" style="width:450px;">
+            <div class="all_title"><span></span><i></i></div>
+            <div id="production" style="width:450px;"></div>
+        </div>
+        <div class="f_l425 pressure" style="width:470px;">
+            <div class="all_title"><span></span><i></i></div>
+            <div id="pressure" style="width:470px;"></div>
+        </div>
+        <div class="f_l425 pressureses" style="width:450px;">
+            <div class="all_title"><span></span><i></i></div>
+            <div id="pressureses" style="width:450px;"></div>
+        </div>
+        <div class="f_l" id="table_content_front">
+        </div>
+    </div>
+     <div class="f_l tend_right_div" style="width:919px;">
+        <div class="f_l425 temperature" style="width:450px;">
+            <div class="all_title"><span></span><i></i></div>
+            <div id="temperature_2" style="width:450px;"></div>
+        </div>
+        <div class="f_l425 production" style="width:450px;">
+            <div class="all_title"><span></span><i></i></div>
+            <div id="production_2" style="width:450px;"></div>
+        </div>
+        <div class="f_l425 pressure" style="width:450px;">
+            <div class="all_title"><span></span><i></i></div>
+            <div id="pressure_2" style="width:450px;"></div>
+        </div>
+        <div class="f_l425 pressureses" style="width:450px;">
+            <div class="all_title"><span></span><i></i></div>
+            <div id="pressureses_2" style="width:450px;"></div>
+        </div>
+		<div class="f_l mb30" id="table_content">
+		</div>
+    </div>
+</div>
+
+
+  <!-- ECharts引入 -->
+<script src="/js/echarts3.js"></script>
+<script src="/js/echarts_all.js"></script>
+<script src="/js/theme/dark.js"></script>
+<script src="/js/jquery-3.1.1.js"></script>
+<!--select-->
+<script src="/js/jquery.nice-select.min.js"></script>
+
+<!--init-->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select').niceSelect();
+    });
+    $(".choice_a_target_top").mouseenter(function(){
+        $(".choice_a_target").css("display","block");
+    });
+    $(".choice_a_target").mouseleave(function(){
+        $(this).hide();
+    });
+
+    //temperature
+    var temperature=document.getElementById('temperature');
+    var myCharts_temperature=echarts.init(temperature,"dark");
+
+
+    //production
+    var production=document.getElementById('production');
+    var myCharts_production=echarts.init(production,"dark");
+
+
+    //pressure
+    var pressure=document.getElementById('pressure');
+    var myCharts_pressure=echarts.init(pressure,"dark");
+
+
+    //pressureses
+    var pressureses=document.getElementById("pressureses");
+    var myCharts_pressureses=echarts.init(pressureses,"dark");
+
+
+
+
+    //temperature
+    var temperature_2=document.getElementById('temperature_2');
+    var myCharts_temperature_2=echarts.init(temperature_2,"dark");
+
+
+    //production
+    var production_2=document.getElementById('production_2');
+    var myCharts_production_2=echarts.init(production_2,"dark");
+
+
+    //pressure
+    var pressure_2=document.getElementById('pressure_2');
+    var myCharts_pressure_2=echarts.init(pressure_2,"dark");
+
+
+    //pressureses
+    var pressureses_2=document.getElementById("pressureses_2");
+    var myCharts_pressureses_2=echarts.init(pressureses_2,"dark");
+
+    var curve_calculate=new Array();
+    curve_calculate.push(null);
+	
+	var press_calculate=new Array();
+    press_calculate.push(null);
+	
+	var host_rate_calculate=new Array();
+    host_rate_calculate.push(null);
+	
+    var host_power_calculate=new Array();
+    host_power_calculate.push(null);
+	
+	var tempture_calculate=new Array();
+    tempture_calculate.push(null);
+	
+	var host_rotate_calculate=new Array();
+    host_rotate_calculate.push(null);
+	
+	var wind_rate_calculate=new Array();
+    wind_rate_calculate.push(null);
+	
+	var wind_power_calculate=new Array();
+    wind_power_calculate.push(null);
+
+    var curve_all=new Array();
+	var press_all=new Array();
+	var host_rate_all=new Array();
+	var host_power_all=new Array();
+	var tempture_all=new Array();
+	var host_rotate_all=new Array();
+	var wind_rate_all=new Array();
+	var wind_power_all=new Array();
+	
+    var indexi = 0;
+	
+    var history_time = new Array();
+	//主机电流
+    var curve_data = new Array();
+	//一级压力
+	var press_data = new Array();
+	//主机频率
+	var host_rate_data = new Array();
+	//主机功率
+	var host_power_data = new Array();
+	//一级温度
+	var tempture_data = new Array();
+	//主机转速
+	var host_rotate_data = new Array();
+	//风机频率
+	var wind_rate_data = new Array();
+	//风机功率
+	var wind_power_data = new Array();
+    
+    var tvalue = $(".wide").val();
+    $(".wide").change(function(){
+        tvalue=$(".wide option:selected").val();
+
+//        console.log(tvalue);
+        curve_time=[];
+        testWebsocket(tvalue);
+    });
+
+
+    var jsonSocket=null;
+    function testWebsocket(tvalue){
+        if(jsonSocket!=null)
+            {
+                jsonSocket.close();
+            }
+        jsonSocket=new WebSocket("{{ websocket_url }}");
+        jsonSocket.onopen=function(){
+            console.log("JSON socket connected!");
+            jsonSocket.send(JSON.stringify(["SUBSCRIBE", "channel/{{ account_tuple[1] }}/{{ project_id }}/"+tvalue]));
+        };
+
+        jsonSocket.onmessage=function(messageEvent){
+            //JSON received: {"SUBSCRIBE":["message","/data/xinlei/prj01/862631039219935","[820, 932, 901, 934, 1290, 1330, 1320]"]}
+            var message=JSON.parse(messageEvent.data);
+            // var start_idx=message.indexOf("[");
+            // var line_data = message.substring(start_idx, message.length-1);
+            // console.log("onmessage,"+JSON.parse(line_data)[1]);
+            // message=JSON.parse(JSON.parse(line_data)[2]);
+            // console.log(message);
+            var line_data=message;
+            if(typeof (line_data)!="number"){
+					
+                var myDate = new Date();
+				var curve_time = new Array();
+				var seconds=myDate.getSeconds();
+                var minutes=myDate.getMinutes();
+				var hour=myDate.getHours();
+				for(var i=0;i<line_data.Tend.Tend_Elem[0].length-history_time.length;i++){
+					curve_time.push((hour>=10?hour:'0'+hour)+':'
+						+(minutes>=10?minutes:'0'+minutes)+':'
+						+(seconds>=10?seconds:'0'+seconds));
+                    if(seconds>44){
+                        seconds-=45;
+                        minutes+=1;
+                        if(minutes>59){
+                            minutes-=60;
+                            hour+=1;
+                            if(hour>23){
+                                hour-=24;
+
+                            }
+                        }
+                    }else{
+                        seconds+=15;
+                    }
+				}
+
+                            curve_data.push(line_data.Original[0]);
+                            
+				press_data.push(line_data.Original[1]);
+				host_rate_data.push(line_data.Original[2]);
+				host_power_data.push(line_data.Original[3]);
+				tempture_data.push(line_data.Original[4]);
+				host_rotate_data.push(line_data.Original[5]);
+				wind_rate_data.push(line_data.Original[6]);
+				wind_power_data.push(line_data.Original[7]);
+
+                history_time.push(myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds());
+                indexi = indexi + 1;
+                if(indexi == 2){
+                    curve_data.shift();
+					press_data.shift();
+					host_rate_data.shift();
+					host_power_data.shift();
+					tempture_data.shift();
+					host_rotate_data.shift();
+					wind_rate_data.shift();
+					wind_power_data.shift();
+
+                    curve_calculate.shift();
+					press_calculate.shift();
+					host_rate_calculate.shift();
+					host_power_calculate.shift();
+					tempture_calculate.shift();
+					host_rotate_calculate.shift();
+					wind_rate_calculate.shift();
+					wind_power_calculate.shift();
+
+                    history_time.shift();
+                }
+                if(curve_data.length>9){
+                    curve_data.shift();
+					press_data.shift();
+					host_rate_data.shift();
+					host_power_data.shift();
+					tempture_data.shift();
+					host_rotate_data.shift();
+					wind_rate_data.shift();
+					wind_power_data.shift();
+
+                    curve_calculate.shift();
+					press_calculate.shift();
+					host_rate_calculate.shift();
+					host_power_calculate.shift();
+					tempture_calculate.shift();
+					host_rotate_calculate.shift();
+					wind_rate_calculate.shift();
+					wind_power_calculate.shift();
+
+                    history_time.shift();
+                }
+                if(curve_calculate.length>9){
+                    curve_calculate.shift();
+                }
+                curve_time = history_time.concat(curve_time);
+
+                curve_all = curve_calculate.concat(line_data.Tend.Tend_Elem[0].slice(
+                    0,line_data.Tend.Tend_Elem[0].length-curve_calculate.length));
+
+				press_all = press_calculate.concat(line_data.Tend.Tend_Elem[1].slice(
+                    0,line_data.Tend.Tend_Elem[1].length-press_calculate.length));
+
+				host_rate_all = host_rate_calculate.concat(line_data.Tend.Tend_Elem[2].slice(
+                    0,line_data.Tend.Tend_Elem[2].length-host_rate_calculate.length));
+
+				host_power_all = host_power_calculate.concat(line_data.Tend.Tend_Elem[3].slice(
+                    0,line_data.Tend.Tend_Elem[3].length-host_power_calculate.length));
+
+				tempture_all = tempture_calculate.concat(line_data.Tend.Tend_Elem[4].slice(
+                    0,line_data.Tend.Tend_Elem[4].length-tempture_calculate.length));
+
+				host_rotate_all = host_rotate_calculate.concat(line_data.Tend.Tend_Elem[5].slice(
+                    0,line_data.Tend.Tend_Elem[5].length-host_rotate_calculate.length));
+
+				wind_rate_all = wind_rate_calculate.concat(line_data.Tend.Tend_Elem[6].slice(
+                    0,line_data.Tend.Tend_Elem[6].length-wind_rate_calculate.length));
+
+				wind_power_all = wind_power_calculate.concat(line_data.Tend.Tend_Elem[7].slice(
+                    0,line_data.Tend.Tend_Elem[7].length-wind_power_calculate.length));
+
+
+                curve_calculate.push(line_data.Tend.Tend_Elem[0][0]);
+				press_calculate.push(line_data.Tend.Tend_Elem[1][0]);
+				host_rate_calculate.push(line_data.Tend.Tend_Elem[2][0]);
+				host_power_calculate.push(line_data.Tend.Tend_Elem[3][0]);
+				tempture_calculate.push(line_data.Tend.Tend_Elem[4][0]);
+				host_rotate_calculate.push(line_data.Tend.Tend_Elem[5][0]);
+				wind_rate_calculate.push(line_data.Tend.Tend_Elem[6][0]);
+				wind_power_calculate.push(line_data.Tend.Tend_Elem[7][0]);
+
+
+                var lineOption=createoption_temperature(line_data,curve_all,curve_data,curve_time);
+
+
+               /* var lineOption=createoption_temperature(line_data,curve_time);*/
+                myCharts_temperature.setOption(lineOption);
+
+
+                var lineOption=createoption_production(line_data,press_all,press_data,curve_time);
+                myCharts_production.setOption(lineOption);
+
+                var lineOption=createoption_pressure(line_data,host_rate_all,host_rate_data,curve_time);
+                myCharts_pressure.setOption(lineOption);
+
+                var lineOption=createoption_pressureses(line_data,host_power_all,host_power_data,curve_time);
+                myCharts_pressureses.setOption(lineOption);
+
+                var lineOption=createoption_temperature_t(line_data,tempture_all,tempture_data,curve_time);
+                myCharts_temperature_2.setOption(lineOption);
+
+                var lineOption=createoption_production_p(line_data,host_rotate_all,host_rotate_data,curve_time);
+                myCharts_production_2.setOption(lineOption);
+
+                var lineOption=createoption_pressure_pr(line_data,wind_rate_all,wind_rate_data,curve_time);
+                myCharts_pressure_2.setOption(lineOption);
+
+                var lineOption=createoption_pressureses_pre(line_data,wind_power_all,wind_power_data,curve_time);
+                myCharts_pressureses_2.setOption(lineOption);
+				var trend=line_data.Tend.Tend_Pred;
+				var time=new Array('10 min','30 min','60 min');
+				$("#table_content_front").empty();
+                for(var i=0;i<4;i++){
+                    $("#temperature,#production,#pressure,#pressureses")
+                        .parent().find("i").eq(i).text(line_data.Parm_CN[i]);
+                    $('#table_content_front').append('<div class="risk_table_div">\
+					<div class="f_l risk_table_title">'+line_data.Parm_CN[i]+'</div>\
+					 <table class="f_l risk_table">\
+					 <tr style="background: #16191c;">\
+                            <td></td>\
+                            <td>'+time[0]+'</td>\
+                            <td>'+time[1]+'</td>\
+                            <td>'+time[2]+'</td>\
+                        </tr>\
+						<tr>\
+                            <td>最小</td>\
+                            <td>'+trend[i].m10[0]+'</td>\
+                            <td>'+trend[i].m30[0]+'</td>\
+							<td>'+trend[i].m60[0]+'</td>\
+                        </tr>\
+						<tr >\
+                            <td>平均</td>\
+                            <td>'+trend[i].m10[1]+'</td>\
+                            <td>'+trend[i].m30[1]+'</td>\
+							<td>'+trend[i].m60[1]+'</td>\
+                        </tr>\
+						<tr>\
+                            <td>最大</td>\
+                            <td>'+trend[i].m10[2]+'</td>\
+                            <td>'+trend[i].m30[2]+'</td>\
+							<td>'+trend[i].m60[2]+'</td>\
+                        </tr>\
+						<tr>\
+                            <td>准确率</td>\
+                            <td>'+trend[i].m10[3]+'</td>\
+                            <td>'+trend[i].m30[3]+'</td>\
+							<td>'+trend[i].m60[3]+'</td>\
+                        </tr>\
+					 </table>\
+					</div>');
+                }
+				$('#table_content').empty();
+				for(var i=4;i<8;i++){
+                    $("#temperature,#production,#pressure,#pressureses,#temperature_2,#production_2,#pressure_2,#pressureses_2")
+                        .parent().find("i").eq(i).text(line_data.Parm_CN[i]);
+					$('#table_content').append('<div class="f_l425 risk_table_div">\
+					<div class="f_l risk_table_title">'+line_data.Parm_CN[i]+'</div>\
+					 <table class="f_l risk_table">\
+					 <tr style="background: #16191c;">\
+                            <td></td>\
+                            <td>'+time[0]+'</td>\
+                            <td>'+time[1]+'</td>\
+                            <td>'+time[2]+'</td>\
+                        </tr>\
+						<tr>\
+                            <td>最小</td>\
+                            <td>'+trend[i].m10[0]+'</td>\
+                            <td>'+trend[i].m30[0]+'</td>\
+							<td>'+trend[i].m60[0]+'</td>\
+                        </tr>\
+						<tr >\
+                            <td>平均</td>\
+                            <td>'+trend[i].m10[1]+'</td>\
+                            <td>'+trend[i].m30[1]+'</td>\
+							<td>'+trend[i].m60[1]+'</td>\
+                        </tr>\
+						<tr>\
+                            <td>最大</td>\
+                            <td>'+trend[i].m10[2]+'</td>\
+                            <td>'+trend[i].m30[2]+'</td>\
+							<td>'+trend[i].m60[2]+'</td>\
+                        </tr>\
+						<tr>\
+                            <td>准确率</td>\
+                            <td>'+trend[i].m10[3]+'</td>\
+                            <td>'+trend[i].m30[3]+'</td>\
+							<td>'+trend[i].m60[3]+'</td>\
+                        </tr>\
+					 </table>\
+					</div>');
+				}
+            }
+
+        };
+    }
+    testWebsocket(tvalue);
+
+</script>
+<script src="/js/date-time.js"></script>
+<script type="text/javascript">
+    setInterval(function() {
+        var newDate = new Date();
+        document.getElementById("time1").innerHTML = newDate.format('yyyy-MM-dd hh:mm:ss');
+    },1000);
+</script>
+</body>

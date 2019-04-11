@@ -1,0 +1,175 @@
+/**
+ * Copyright (c) 2014-2018 Mixlinker Networks Inc. <mixiot@mixlinker.com>
+ * All rights reserved.
+ */
+
+/*CSS公用样式*/
+html,body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, blockquote, th, td {
+    margin:0;
+    padding:0;
+}
+
+body{
+    scrollbar-face-color: #f6f6f6;
+    scrollbar-highlight-color: #ffffff;
+    scrollbar-shadow-color: #cccccc;
+    scrollbar-3dlight-color: #cccccc;
+    scrollbar-arrow-color: #330000;
+    scrollbar-track-color: #f6f6f6;
+    font-family:"微软雅黑";
+    font-size:12px;
+    /*width: 1902px;*/
+    width: 1920px;
+    height: 1080px;
+    /*overflow-x: scroll;*/
+    overflow-x: hidden;
+    background: #23272B;
+}
+
+@font-face {
+    font-family: DIN_Medium;
+    src: url("DIN Medium.ttf");
+}
+
+/*.pd60{width: 1800px;padding: 0 50px;}*/
+.pd60{width: 1859px;padding: 0 30px;}
+
+table {border-collapse:collapse;border-spacing:0;}
+
+img {border:0;}
+
+li {list-style:none;}
+
+sup {vertical-align:text-top;}
+
+sub {vertical-align:text-bottom;}
+
+input, textarea, select {font-family:inherit;font-size:inherit;font-weight:inherit;}
+
+/*带清除高度的10PX高的空DIV*/
+.blank{clear:both;height:10px;overflow:hidden;font-size:0px;}
+.blank1{clear:both;height:5px;overflow:hidden;font-size:0px;}
+
+/*单行隐藏*/
+.str{white-space:nowrap;word-break:keep-all;overflow:hidden;text-overflow:ellipsis;}
+
+/*多行隐藏*/
+.strmore{overflow:hidden;text-overflow:ellipsis;}
+
+/*带清除高度的0PX高的空DIV*/
+.cls{clear:both;height:0px;overflow:hidden;background:#FFF;}
+
+.f_l{float: left;}
+/*.f_l1090{float: left;width: 1090px;}*/
+.f_l1090{float: left;width: 1039px;}
+
+.f_l425{float: left;width: 425px;}
+.f_r{float: left;}
+.mb30{margin-bottom: 30px;display: inline;}
+.mt20{margin-top: 20px!important;display: inline;}
+
+/**[[header**/
+.header{width: 1920px;height: 79px;background: #16191c;font-family: DIN_Medium;}
+.header ul li:first-child{line-height: 79px;font-size: 36px;color: #fff;margin-left: 0px;display: inline;}
+.header ul li:nth-child(2){
+    font-size: 24px;
+    color: #cccccc;
+    line-height: 79px;
+    margin-left: 20px;
+    display: inline; 
+    font-weight: bold;
+    font-family: Myriad Pro;
+    margin-top: 5px;
+}
+.header ul li:nth-child(2) img{width: 16px;height: 16px;margin-right: 18px;}
+/**header]]**/
+/* .header ul li:last-child{width: 222px;height: 40px; margin-left: 1125px; margin-top: 19px; background: #23272b; border-radius: 6px;} */
+
+.header_all_r{
+    float: right;
+    width: 352px;
+    height: 40px;
+    margin-top: 19px;
+    /* background: white; */
+}
+
+.header_all_r .time{
+    float: left;
+    background: #23272b;
+    width: 222px;
+    height: 40px; 
+    border-radius: 6px;
+}
+
+ #icon_time{
+     float: left;
+     margin-left: 20px; 
+     margin-top: 12px; 
+} 
+
+.f_l #time1{
+    float: left;
+    margin-left: 8px;
+    line-height: 40px;
+    color: #8e8e9a;
+    font-size: 16px;
+    margin-top: 0px;
+    font-weight: bold;
+}
+
+ .home{
+    float: left;
+    margin-left: 10px;
+    width: 40px;
+    height: 40px; 
+    border-radius: 6px;
+    background: #23272b;
+} 
+.home img{
+    margin-left: 12px;
+     margin-top: 9px; 
+}
+.logout{
+    float: left;
+    margin-left: 10px;
+    width: 40px;
+    height: 40px; 
+    border-radius: 6px;
+    background: #23272b;
+}
+.logout img{
+    margin-left: 12px;
+    margin-top: 10px;
+}
+
+
+#remark_content{
+    height: 500px;
+    position: absolute;
+    top:35px;
+}
+
+.matrix_table{
+    position: relative;
+    margin: 200px auto 0;
+}
+/*.matrix_table_left{*/
+    /*position: absolute;*/
+    /*left:0;*/
+    /*top:0;*/
+/*}*/
+/*.matrix_table_top{*/
+    /*position: absolute;*/
+    /*left:0;*/
+    /*top:0;*/
+    /*width: 550px!important;*/
+/*}*/
+.table_left a{
+    height: 33px!important;
+}
+.stab_palette{
+    bottom: 10px!important;
+    top:auto!important;
+}
+
+

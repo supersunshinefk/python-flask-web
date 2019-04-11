@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>indass-select</title>
+    <!--公用样式-->
+    <link rel="stylesheet" href="/css/global.css" />
+    <!--select样式-->
+    <link rel="stylesheet" href="/css/nice-select.css"/>
+    <!--index.css-->
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+        .nice-select{height: 84px;line-height: 84px;color: #fff;font-size: 20px;border: 1px solid #fff;}
+        .header_all_r .time{
+            margin-left: 60px;
+        }
+    </style>
+</head>
+<body>
+
+<!--[[header-->
+
+<div class="header f_l">
+    <ul>
+        <li class="f_r"><img src="/images/logo_2.png"/></li>
+        <li class="f_l">INDASS Dashboard</li>
+        <!-- <li class="f_l"></li> -->
+    </ul>
+    <div class="header_all_r">
+        <div class="time"><img src="/images/icon_time.png" id="icon_time"><div id="time1">2018-01-00  00:00:00</div></div>
+{#        <div class="home"><a href="/select/{{ username }}"><img src="/images/home_icon.png" alt="home_icon"></a></div>#}
+        <div class="logout"><a href="/logout"><img src="/images/logout_icon.png" alt="logout_icon"></a></div>
+    </div>
+</div>
+<!--header]]-->
+
+<div class="indass_relative">
+    <div class="indass_select_bg">
+        <div class="indass_select_title">Please select the analysis project</div>
+        <form id="indass_form" action="" onsubmit="return false;">
+            <div class="ind_select">
+                <select class="wide" placeholder="">
+
+                    {% for project in project_list %}
+                        <option  value={{ project[1] }}>分析项目: {{ project[0] }}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <input type="submit" class="indass_submit ml75" id="btn-submit" value="OK" />
+        </form>
+    </div>
+</div>
+
+
+</body>
+
+<script src="/js/jquery-3.1.1.js"></script>
+<!--select-->
+<script src="/js/jquery.nice-select.min.js"></script>
+
+<!--init-->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select').niceSelect();
+        $('#indass_form').submit(function() {
+            var option = $(".wide option:checked").val();
+            if (option == undefined){
+                alert("分析项目为空，请先创建分析项目");
+            }
+            else{
+            location.href = "/{{ username }}/" + option +"/index";
+            }
+        });
+    });
+</script>
+<script src="/js/date-time.js"></script>
+<script type="text/javascript">
+    setInterval(function() {
+        var newDate = new Date();
+        document.getElementById("time1").innerHTML = newDate.format('yyyy-MM-dd hh:mm:ss');
+    },1000);
+</script>

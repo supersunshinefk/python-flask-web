@@ -1,0 +1,110 @@
+{#Copyright (c) 2014-2018 Mixlinker Networks Inc. <mixiot@mixlinker.com>#}
+{#All rights reserved.#}
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <!--公用样式-->
+    <link rel="stylesheet" href="/css/global.css" />
+    <!--index.css-->
+    <link rel="stylesheet" href="/css/index.css" />
+</head>
+<body style="background: #16191c;">
+<div class="f_l">
+    <div class="login_div">
+        <div class="f_l login_indass_left">
+            <img src="/images/indass_login_logo.png" />
+            <img src="/images/login_left_pic.jpg" />
+        </div>
+        <form id="login_form" action="" method="POST">
+            <div class="f_l login_indass_right">
+                <div class="f_l login_indass_right_main">
+                    <div class="f_l login_indass_title">INDASS Dashboard</div>
+                    <div class="f_l login_indass_input">
+                        {#                <input type="text" id="username" name="" value="" placeholder="用户账号" />#}
+                        {{ form.user }}
+                        {#                <input type="password" id="password" name="" value="" placeholder="密码" />#}
+                        {{ form.password }}
+                    </div>
+                    {% if form.errors.csrf_token %}
+                    {% for error in form.errors.csrf_token %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                    {% endif %}
+                    {{ form.csrf_token }}
+                    {{ form.submit }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script src="/js/jquery-3.1.1.js"></script>
+<!--init-->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#login_form').submit(function (e) {
+            e.preventDefault();
+            if ($("#username").val() == "") {
+                alert("用户名不能为空");
+                return false;
+            } else if ($("#password").val() == "") {
+                alert("密码不能为空");
+                return false;
+            }
+            var postData = $("#login_form").serialize(); //序列化表单，后台可正常通过post方法获取数据
+            console.log(postData);
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                data: postData,
+                beforeSend: function () {
+                    $("#submit").attr("disabled", true);//提交表单前的处理，防止用户多次点击【登录】，重复提交表单
+                    $("#submit").val("正在登录");
+                },
+                success: function (msg) {
+
+                    if (msg.errno == 0) {
+                        //alert(msg.errmsg);
+                        location.href = "/select/"+msg.data["username"];
+                    }
+                    else if(msg.errno == 1){
+                        alert(msg.errmsg);
+                        location.href = "/login"
+                    }
+                    else if(msg.errno == 2){
+                        alert(msg.errmsg);
+                        location.href = "/login"
+                    }
+                    else if(msg.errno == 3){
+                        alert(msg.errmsg);
+                        location.href = "/login"
+                    }
+                    else if(msg.errno == 4){
+                        alert(msg.errmsg);
+                        location.href = "/login"
+                    }
+                    else if(msg.errno == 5){
+                        alert(msg.errmsg);
+                        location.href = "/login"
+                    }
+                    else if(msg.errno == 6){
+                        alert(msg.errmsg);
+                        location.href = "/login"
+                    }
+                    else if(msg.errno == 7){
+{#                        alert(msg.errmsg);#}
+                        location.href = msg.data["indass_next"]
+                    }
+                    else {
+                        $("#submit").attr("disabled", false);
+                        $("#submit").val("登录");
+                        alert("用户登录失败！");
+                    }
+                }
+            });
+        });
+    });
+
+</script>

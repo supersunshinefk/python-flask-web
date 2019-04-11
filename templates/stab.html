@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Stability</title>
+    <!--公用样式-->
+    <link rel="stylesheet" href="/css/global.css"/>
+    <!--select样式-->
+    <link rel="stylesheet" href="/css/nice-select.css"/>
+    <!--index.css-->
+    <link rel="stylesheet" href="/css/index.css"/>
+    <style>
+    .select_number #num02{
+        background: #4261e2;
+    }
+    .select_number #num02 a{
+        color: white;
+    }
+    </style>
+</head>
+<body>
+<div class="choice_a_target_top"></div>
+<!--[[header-->
+<div class="header f_l">
+    <ul>
+        <li class="f_r"><img src="/images/logo_2.png"/></li>
+        <li class="f_l">INDASS Dashboard</li>
+        <!-- <li class="f_l"></li> -->
+    </ul>
+    <div class="header_all_r">
+        <div class="time"><img src="/images/icon_time.png" id="icon_time"><div id="time1">2018-01-00  00:00:00</div></div>
+        <div class="home"><a href="/select/{{ username }}"><img src="/images/home_icon.png" alt="home_icon"></a></div>
+        <div class="logout"><a href="/logout"><img src="/images/logout_icon.png" alt="logout_icon"></a></div>
+    </div>
+</div>
+<!--header]]-->
+
+
+<!--padding-->
+<div class="pd60">
+
+    <!--[[info-->
+      <div class="main_header f_l">
+        <ul class="main_header_ul f_l">
+            <li>客户</li>
+            <li>{{ account_tuple[0] }}</li>
+        </ul>
+        <ul class="main_header_ul f_l">
+            <li>设备型号</li>
+            <li>{{ obj_group_name }}</li>
+        </ul>
+
+        <!--[[select-->
+        <div class="index_select f_r">
+            <select class="wide">
+                {% for object_id in object_id_list %}
+                    <option value="{{ object_id }}">设备编号： {{ object_id }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="select_number">
+            <ul>
+                <li id="num01"><a href="index">01</a></li>
+                <li id="num02"><a href="#">02</a></li>
+                <li id="num03"><a href="tend">03</a></li>
+                <li id="num04"><a href="risk">04</a></li>
+            </ul>
+        </div>
+        <!--select]]-->
+
+    </div>
+    <!--info]]-->
+    <div class="f_l">
+        <div class="f_l matrix_div_left">
+            <div class="f_l1090">
+                <div class="f_l main509">
+                    <div class="all_title"><span></span>稳定性变化梯度</div>
+                    <div id="secondFirst"></div>
+                </div>
+                <div class="f_l main509">
+                    <div class="all_title"><span></span>稳定性变化累积效应</div>
+                    <div id="secondSecond"></div>
+                </div>
+            </div>
+            <div class="main1090 f_l1090  mb30 mt20">
+                <div class="all_title"><span></span>运行稳定性曲线</div>
+                <div id="secondThird" class="f_l1090"></div>
+            </div>
+        </div>
+
+        <div class="f_l matrix_div_right">
+             <div class="all_title"><span></span>稳定性关联图谱</div>
+            <!--<div class="stab_palette">-->
+                <!--<ul>-->
+                    <!--<li class="f_l"><a class=""></a><a></a><a></a><a></a><a></a></li>-->
+                    <!--<li class="f_l"><i>-1</i><i>-0.5</i><i>0</i><i>0.5</i><i>1</i></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+
+            <div class="stab_palette">
+                <div class="stab_palette_bg"></div>
+                <ul>
+                    <li>-1</li>
+                    <li>0</li>
+                    <li>1</li>
+                </ul>
+            </div>
+
+            <table class="matrix_table" id="table_content" style="margin-bottom:50px;">
+            </table>
+                            <div style="text-align:center;font-size:12px;color:#8e8e9a;" id="remark_content">
+                            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ECharts引入 -->
+<script src="/js/echarts3.js"></script>
+<script src="/js/echarts_all.js"></script>
+<script src="/js/theme/dark.js"></script>
+<script src="/js/jquery-3.1.1.js"></script>
+<!--select-->
+<script src="/js/jquery.nice-select.min.js"></script>
+
+<!--init-->
+<script type="text/javascript">
+   //var testJson=JSON.parse(testJsonStr);
+{##}
+{#    function  test() {#}
+{#        var line_data=testJson;#}
+{#            if (typeof(line_data) != "number")#}
+{#            {#}
+{#                var lineOption_second_gradirent_map=createoption_second_gradirent_map(line_data);#}
+{#                myChartsGMap.setOption(lineOption_second_gradirent_map);#}
+{##}
+{#                var lineOption_second_cumulating_map=createoption_second_cumulating_map(line_data);#}
+{#                myChartsCMap.setOption(lineOption_second_cumulating_map);#}
+{##}
+{#                discreteness_data.push(line_data.Stab.Indx);#}
+{#                var myDate = new Date();#}
+{#                var seconds=myDate.getSeconds();#}
+{#                var minutes=myDate.getMinutes();#}
+{#                var hour=myDate.getHours();#}
+{#                discreteness_time.push((hour>=10?hour:'0'+hour)+':'+(minutes>=10?minutes:'0'+minutes)+':'+(seconds>=10?seconds:'0'+seconds));#}
+{##}
+{#                if(discreteness_data.length>10){#}
+{#                    discreteness_data.shift();#}
+{#                    discreteness_time.shift();#}
+{#                }#}
+{#                var lineOption_second_discreteness_curve=createoption_second_discreteness_curve(discreteness_data, discreteness_time);#}
+{#                myChart.setOption(lineOption_second_discreteness_curve);#}
+{#                $(".stab_palette").css("display","block");#}
+{#                $('#table_top').empty();#}
+{#                $('#table_left').empty();#}
+{#                var params=line_data.Parm;#}
+{#                for(var i=0; i<params.length; i++){#}
+{#                    $('#table_top').append("<a>"+params[i]+"</a>");#}
+{#                    $('#table_left').append("<a>"+params[i]+"</a>");#}
+{#                }#}
+{#                Vari_Matr=line_data.Stab.Vari_Matr;#}
+{#                var param = line_data.Parm;#}
+{#				var parm_cn = line_data.Parm_CN;#}
+{#				var remark_content='<tr>';#}
+{#				for(var i in param){#}
+{#					remark_content+='<td style="max-height: 24px; float:left; margin-left: 20px; margin-top: 10px; font-size:16px">'+param[i]+':'+parm_cn[i]+'</td>';#}
+{#					if(i==7){#}
+{#						remark_content+='</tr><tr>';#}
+{#					}#}
+{#				}#}
+{#				remark_content+='</tr>';#}
+{##}
+{#                $('#table_content').empty();#}
+{##}
+{##}
+{#                if($('#table_content tr').length==0){#}
+{#                    for(var i=0;i<Vari_Matr.length;i++){#}
+{#                        var td_str='';#}
+{#                        for(var j=0;j<Vari_Matr[i].length;j++){#}
+{#                            if(i==j){#}
+{#                                td_str+='<td><i style="background: #666;"></i></td>';#}
+{#                            }else{#}
+{#                                var col=getColor(Vari_Matr[i][j]);#}
+{#                                td_str+='<td><i style="background:rgb'+col+';"></i></td>';#}
+{#                            }#}
+{#                        }#}
+{#                        $('#table_content').append('<tr>'+td_str+'</tr>');#}
+{#                    }#}
+{#                    var height=$("table").height();#}
+{#                    risk_bias_line(height);#}
+{#                }#}
+{#                $('#remark_content').empty();#}
+{#				$('#remark_content').append('<table style="width: 90%;margin:auto;border-collapse:separate; border-spacing:0px 10px;">'+remark_content+'</table>');#}
+{##}
+{#            }#}
+{#    }#}
+
+
+    $(document).ready(function() {
+        //test();
+        $('select').niceSelect();
+    });
+
+    $(".choice_a_target_top").mouseenter(function(){
+        $(".choice_a_target").css("display","block");
+    });
+    $(".choice_a_target").mouseleave(function(){
+        $(this).hide();
+    });
+
+    //对角线
+    function risk_bias_line(height){
+        var cs = document.getElementById("bias_line");
+        var ct = cs.getContext("2d");
+        cs.height=height;
+        ct.strokeStyle = "#ccc";
+        ct.lineWidth=2;
+        ct.beginPath();
+        ct.moveTo(0,0);
+        ct.lineTo(height,height);
+        ct.stroke();
+    }
+
+    //INDEX-GRADIRENT-MAP
+    var secondFirst=document.getElementById('secondFirst');
+    var myChartsGMap=echarts.init(secondFirst,"dark");
+
+
+    //INDEX-CUMULATING_MAP
+    var secondSecond=document.getElementById('secondSecond');
+    var myChartsCMap=echarts.init(secondSecond,"dark");
+
+
+    //INDEX-DISCRETENESS-CURVE
+    var dom = document.getElementById("secondThird");
+    var myChart = echarts.init(dom,'dark');
+
+
+
+//    function getColor(num){
+//        var a = num;
+//        if(a>=0.5){
+//            var n = a*(-500)+505;
+//            return '(0,'+n+',255)';
+//        }else if (0<=a && a <0.5){
+//            var n = a*(-500)+255;
+//            return '('+n+',255,255)';
+//        }else if (-0.5<=a && a <0){
+//            var n = a*(500)+250;
+//            return '(255,255,'+n+')';
+//        }else{
+//            var n = a*(500)+505;
+//            return '(255,'+n+',0)';
+//        }
+//    }
+    function getColor(num){
+        var a = Math.round(num*100)/100;
+        if(a>=0){
+            var n = a*(-200)+255;
+            return '(255,'+n+','+n+')';
+        }else{
+            var n = a*(200)+255;
+            return '('+n+','+n+',255)';
+        }
+    }
+
+    var discreteness_data = new Array();
+    var discreteness_time = new Array();
+    var Vari_Matr = new Array();
+
+    //var tvalue='862631039192314'; 
+    var tvalue = $(".wide").val();
+    $(".wide").change(function(){
+        tvalue=$(".wide option:selected").val();
+        console.log(tvalue);
+        discreteness_data=[];
+        discreteness_time=[];
+        Vari_Matr=[];
+        testWebsocket(tvalue);
+    });
+    var jsonSocket = null;
+    function testWebsocket(tvalue){
+        if(jsonSocket!=null)
+            {
+                jsonSocket.close();
+            }
+        jsonSocket=new WebSocket("{{ websocket_url }}");
+        jsonSocket.onopen=function(){
+            console.log("JSON socket connected!");
+//            jsonSocket.send(JSON.stringify(["SUBSCRIBE", "/data/xinlei/prj01/862631039219935"]));
+            jsonSocket.send(JSON.stringify(["SUBSCRIBE", "channel/{{ account_tuple[1] }}/{{ project_id }}/"+tvalue]));
+
+//            jsonSocket.send(JSON.stringify(["SUBSCRIBE", "/data/xinlei/prj01/"+tvalue]));
+        };
+        jsonSocket.onmessage=function(messageEvent){
+            //JSON received: {"SUBSCRIBE":["message","/data/xinlei/prj01/862631039219935","[820, 932, 901, 934, 1290, 1330, 1320]"]}
+            var message=JSON.parse(messageEvent.data);
+            // var start_idx=message.indexOf("[");
+            // var line_data = message.substring(start_idx, message.length-1);
+            // console.log("onmessage,"+JSON.parse(line_data)[1]);
+            // message=JSON.parse(JSON.parse(line_data)[2]);
+            var line_data=message;
+            if (typeof(line_data) != "number")
+            {
+                var lineOption_second_gradirent_map=createoption_second_gradirent_map(line_data);
+                myChartsGMap.setOption(lineOption_second_gradirent_map);
+
+                var lineOption_second_cumulating_map=createoption_second_cumulating_map(line_data);
+                myChartsCMap.setOption(lineOption_second_cumulating_map);
+
+                discreteness_data.push(line_data.Stab.Indx);
+                var myDate = new Date();
+                var seconds=myDate.getSeconds();
+                var minutes=myDate.getMinutes();
+                var hour=myDate.getHours();
+                discreteness_time.push((hour>=10?hour:'0'+hour)+':'+(minutes>=10?minutes:'0'+minutes)+':'+(seconds>=10?seconds:'0'+seconds));
+
+                if(discreteness_data.length>10){
+                    discreteness_data.shift();
+                    discreteness_time.shift();
+                }
+                var lineOption_second_discreteness_curve=createoption_second_discreteness_curve(discreteness_data, discreteness_time);
+                myChart.setOption(lineOption_second_discreteness_curve);
+                $(".stab_palette").css("display","block");
+                $('#table_top').empty();
+                $('#table_left').empty();
+                var params=line_data.Parm;
+
+                Vari_Matr=line_data.Stab.Vari_Matr;
+                var param = line_data.Parm;
+				var parm_cn = line_data.Parm_CN;
+				var remark_content='<tr>';
+				for(var i in param){
+					remark_content+='<td style="max-height: 24px; float:left; margin-left: 20px; margin-top: 10px; font-size:16px">'+param[i]+':'+parm_cn[i]+'</td>';
+{#					if(i==7){#}
+{#						remark_content+='</tr><tr>';#}
+{#					}#}
+				}
+				remark_content+='</tr>';
+
+                $('#table_content').empty();
+
+                var setKey=true;
+		if($('#table_content tr').length==0){
+         if(Vari_Matr != []||Vari_Matr != ""||Vari_Matr !=null ||Vari_Matr != undefined){
+          for(var i=0;i<Vari_Matr.length;i++){
+                        var td_str='';
+                        for(var j=0;j<Vari_Matr[i].length;j++){
+                            if(i==j){
+                                td_str+='<td><i style="background: #666;"></i></td>';
+                            }else{
+                                var col=getColor(Vari_Matr[i][j]);
+                                td_str+='<td><i style="background:rgb'+col+';"></i></td>';
+                            }
+                        }
+                        $('#table_content').append('<tr>'+td_str+'</tr>');
+
+                        if(setKey){
+                            $('#table_content').append('<canvas id="bias_line" style="position: absolute;top:0px;left: 0px;z-index: 1000; width: 98%"></canvas>');
+                            $('#table_content').append('<div class="matrix_table_top" id="table_top"> </div>');
+                            $('#table_content').append('<div class="matrix_table_left" id="table_left"></div>');
+
+                        }
+                        setKey=false;
+                }
+          
+         }
+         
+                    
+                    var height=$("table").height();
+                    risk_bias_line(height);
+        }
+
+                for(var i=0; i<params.length; i++){
+                    $('#table_top').append("<a>"+params[i]+"</a>");
+                    $('#table_left').append("<a>"+params[i]+"</a>");
+                }
+                $('#remark_content').empty();
+				$('#remark_content').append('<table style="width: 90%;margin:auto;border-collapse:separate; border-spacing:0px 10px;">'+remark_content+'</table>');
+
+            }
+        };
+        jsonSocket.onclose = function() {
+            console.log("JSON socket closed!");
+        }
+    }
+    testWebsocket(tvalue);
+</script>
+<script src="/js/date-time.js"></script>
+<script type="text/javascript">
+    setInterval(function() {
+        var newDate = new Date();
+        document.getElementById("time1").innerHTML = newDate.format('yyyy-MM-dd hh:mm:ss');
+    },1000);
+</script>
+</body>
